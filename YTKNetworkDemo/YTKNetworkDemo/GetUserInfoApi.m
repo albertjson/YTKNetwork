@@ -7,6 +7,7 @@
 //
 
 #import "GetUserInfoApi.h"
+#import "YTKJSONModel.h"
 
 @implementation GetUserInfoApi {
     NSString *_userId;
@@ -34,7 +35,10 @@
         @"level": [NSNumber class]
     };
 }
-
+- (Class)modelClass
+{
+    return [YTKJSONModel class];
+}
 - (NSInteger)cacheTimeInSeconds {
     return 60 * 3;
 }

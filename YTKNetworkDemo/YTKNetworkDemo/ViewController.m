@@ -14,6 +14,8 @@
 #import "RegisterApi.h"
 #import "YTKBaseRequest+AnimatingAccessory.h"
 
+#import "YTKJSONModel.h"
+
 @interface ViewController ()<YTKChainRequestDelegate>
 
 @end
@@ -72,13 +74,17 @@
         NSDictionary *json = [api responseJSONObject];
         NSLog(@"json = %@", json);
         // show cached data
+        
+        YTKJSONModel * model = [api responseJSONModel];
+        
+        NSLog(@"jsonmodelllll=%@---%@",model.nick,model.level);
     }
 
     api.animatingText = @"正在加载";
     api.animatingView = self.view;
 
     [api startWithCompletionBlockWithSuccess:^(YTKBaseRequest *request) {
-        NSLog(@"update ui");
+        NSLog(@"update ui=%@",[api responseJSONModel]);
     } failure:^(YTKBaseRequest *request) {
         NSLog(@"failed");
     }];
@@ -86,6 +92,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self loadCacheData];
 }
 
 - (void)didReceiveMemoryWarning {

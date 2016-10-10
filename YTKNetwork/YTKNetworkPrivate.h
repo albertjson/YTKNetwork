@@ -65,6 +65,7 @@ FOUNDATION_EXPORT void YTKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 @property (nonatomic, strong, readwrite) NSURLSessionTask *requestTask;
 @property (nonatomic, strong, readwrite, nullable) NSData *responseData;
 @property (nonatomic, strong, readwrite, nullable) id responseJSONObject;
+@property (nonatomic, strong, readwrite, nullable) id responseJSONModel;///TTT
 @property (nonatomic, strong, readwrite, nullable) id responseObject;
 @property (nonatomic, strong, readwrite, nullable) NSString *responseString;
 @property (nonatomic, strong, readwrite, nullable) NSError *error;

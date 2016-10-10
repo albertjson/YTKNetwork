@@ -166,6 +166,13 @@ typedef void(^YTKRequestCompletionBlock)(__kindof YTKBaseRequest *request);
 ///  for the response object. Otherwise this value is nil.
 @property (nonatomic, strong, readonly, nullable) id responseJSONObject;
 
+
+/**
+ * add by zc 2016年10月10日14:33:54 TTT
+ * JSONModel object
+ */
+@property (nonatomic, strong, readonly, nullable) id responseJSONModel;
+
 ///  This error can be either serialization error or network error. If nothing wrong happens
 ///  this value will be nil.
 @property (nonatomic, strong, readonly, nullable) NSError *error;
@@ -329,6 +336,9 @@ typedef void(^YTKRequestCompletionBlock)(__kindof YTKBaseRequest *request);
 
 ///  This validator will be used to test if `responseStatusCode` is valid.
 - (BOOL)statusCodeValidator;
+
+/// model对应的类，子类实现的话会直接映射到该model类并进行初始化操作 TTT
+- (Class)modelClass;
 
 @end
 

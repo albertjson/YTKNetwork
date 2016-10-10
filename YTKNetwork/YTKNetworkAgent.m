@@ -32,6 +32,8 @@
 #import "AFNetworking.h"
 #endif
 
+#import <JSONModel.h>
+
 #define Lock() pthread_mutex_lock(&_lock)
 #define Unlock() pthread_mutex_unlock(&_lock)
 
@@ -337,10 +339,33 @@
         [request clearCompletionBlock];
     });
 }
-
+///json---model TTT
+- (void)JSONConvertModel:(YTKBaseRequest*)request
+{
+    Class modelClass = [request modelClass];
+    if (!modelClass) {
+        return;
+    }
+    
+    NSError * error = nil;
+    
+    if ([request.responseJSONObject isKindOfClass:[NSDictionary class]]) {
+        
+        request.responseJSONModel = [[modelClass alloc] initWithDictionary:request.responseJSONObject error:&error];
+        
+    }else if ([request.responseJSONObject isKindOfClass:[NSArray class]]){
+        
+        request.responseJSONModel = [modelClass arrayOfModelsFromDictionaries:request.responseJSONObject error:&error];
+    }
+    if (error) {
+        YTKLog(@"Request JSON---JSONModel Failed =%@",error);
+    }
+}
 - (void)requestDidSucceedWithRequest:(YTKBaseRequest *)request {
     @autoreleasepool {
         [request requestCompletePreprocessor];
+
+        [self JSONConvertModel:request];
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         [request toggleAccessoriesWillStopCallBack];

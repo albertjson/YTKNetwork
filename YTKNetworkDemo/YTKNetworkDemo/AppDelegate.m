@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "YTKNetworkConfig.h"
 #import "YTKUrlArgumentsFilter.h"
+#import "ZCMockHttpUtil.h"
 
 @interface AppDelegate ()
 
@@ -25,6 +26,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self setupRequestFilters];
+    [ZCMockHttpUtil configMockHttpResponse];
     return YES;
 }
 

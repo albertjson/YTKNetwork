@@ -1,8 +1,10 @@
 target 'YTKNetworkDemo' do
     pod 'YTKNetwork', :path => '../'
+    pod 'OHHTTPStubs'
 end
 
 target 'YTKNetworkDemoTests' do
     pod 'YTKNetwork', :path => '../'
+    pod 'OHHTTPStubs'
 end
 

@@ -24,4 +24,5 @@ Pod::Spec.new do |s|
   s.framework = "CFNetwork"
 
   s.dependency "AFNetworking", "~> 3.0"
+  s.dependency "JSONModel", "~> 1.7.0"
 end

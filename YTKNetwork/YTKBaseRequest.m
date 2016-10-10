@@ -38,6 +38,7 @@ NSString *const YTKRequestValidationErrorDomain = @"com.yuantiku.request.validat
 @property (nonatomic, strong, readwrite) NSURLSessionTask *requestTask;
 @property (nonatomic, strong, readwrite) NSData *responseData;
 @property (nonatomic, strong, readwrite) id responseJSONObject;
+@property (nonatomic, strong, readwrite) id responseJSONModel;//TTT
 @property (nonatomic, strong, readwrite) id responseObject;
 @property (nonatomic, strong, readwrite) NSString *responseString;
 @property (nonatomic, strong, readwrite) NSError *error;
@@ -205,7 +206,10 @@ NSString *const YTKRequestValidationErrorDomain = @"com.yuantiku.request.validat
         return NO;
     }
 }
-
+- (Class)modelClass
+{
+    return nil;
+}
 #pragma mark - NSObject
 
 - (NSString *)description {

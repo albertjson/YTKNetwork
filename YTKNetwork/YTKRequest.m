@@ -24,6 +24,7 @@
 #import "YTKNetworkConfig.h"
 #import "YTKRequest.h"
 #import "YTKNetworkPrivate.h"
+#import <JSONModel.h>
 
 #ifndef NSFoundationVersionNumber_iOS_8_0
 #define NSFoundationVersionNumber_With_QoS_Available 1140.11
@@ -93,6 +94,7 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
 @property (nonatomic, strong) NSData *cacheData;
 @property (nonatomic, strong) NSString *cacheString;
 @property (nonatomic, strong) id cacheJSON;
+@property (nonatomic, strong) id cacheJSONModel;///TTT
 @property (nonatomic, strong) NSXMLParser *cacheXML;
 
 @property (nonatomic, strong) YTKCacheMetadata *cacheMetadata;
@@ -195,6 +197,13 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
         return _cacheJSON;
     }
     return [super responseJSONObject];
+}
+/// TTT
+- (id)responseJSONModel {
+    if (_cacheJSONModel) {
+        return _cacheJSONModel;
+    }
+    return [super responseJSONModel];
 }
 
 - (id)responseObject {
@@ -319,6 +328,9 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
                 return YES;
             case YTKResponseSerializerTypeJSON:
                 _cacheJSON = [NSJSONSerialization JSONObjectWithData:_cacheData options:(NSJSONReadingOptions)0 error:&error];
+                if (!error) {
+                    [self JSONConvertModel:_cacheJSON];
+                }
                 return error == nil;
             case YTKResponseSerializerTypeXMLParser:
                 _cacheXML = [[NSXMLParser alloc] initWithData:_cacheData];
@@ -327,7 +339,27 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
     }
     return NO;
 }
-
+///TTT
+- (void)JSONConvertModel:(id)cacheJSON
+{
+    Class modelClass = [self modelClass];
+    if (!modelClass) {
+        return;
+    }
+    NSError * error = nil;
+    
+    if ([cacheJSON isKindOfClass:[NSDictionary class]]) {
+        
+        _cacheJSONModel = [[modelClass alloc] initWithDictionary:cacheJSON error:&error];
+        
+    }else if ([cacheJSON isKindOfClass:[NSArray class]]){
+        
+        _cacheJSONModel = [modelClass arrayOfModelsFromDictionaries:cacheJSON error:&error];
+    }
+    if (error) {
+        YTKLog(@"Request Cache JSON---JSONModel Failed =%@",error);
+    }
+}
 - (void)saveResponseDataToCacheFile:(NSData *)data {
     if ([self cacheTimeInSeconds] > 0 && ![self isDataFromCache]) {
         if (data != nil) {
@@ -353,6 +385,7 @@ static dispatch_queue_t ytkrequest_cache_writing_queue() {
     _cacheData = nil;
     _cacheXML = nil;
     _cacheJSON = nil;
+    _cacheJSONModel = nil;///TTT
     _cacheString = nil;
     _cacheMetadata = nil;
     _dataFromCache = NO;
